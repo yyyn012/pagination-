@@ -9,7 +9,7 @@ const maxContent = 10;
 
 const maxPage = Math.ceil(numOfContent / maxContent);
 let page = 1;
-const maxButton = 10;
+const maxButton = 5;
 
 // contents: 글 목록을 담기 위한 부모 리스트 요소
 // buttons: 페이지 버튼을 담기 위한 부모 리스트 요소
@@ -19,7 +19,7 @@ const maxButton = 10;
 // maxPage: 글을 모두 보여주기 위해 필요한 페이지의 개수
 // page: 현재 페이지 (시작 페이지 = 1)
 
-// 글 목록, 버튼 생성 함수 구현
+// 글 목록 생성 함수
 const makeContent = (id) => {
   const content = document.createElement("li");
   content.classList.add("content");
@@ -32,11 +32,14 @@ const makeContent = (id) => {
   return content;
 };
 
+// 버튼 생성 함수
+
 const makeButton = (id) => {
   const button = document.createElement("button");
   button.classList.add("button");
   button.dataset.num = id;
   button.innerText = id;
+  // [].forEach.call(유사배열, (원소) => { ... } ) 유사배열의 원소들을 가져옴
   button.addEventListener("click", (e) => {
     Array.prototype.forEach.call(buttons.children, (button) => {
       if (button.dataset.num) button.classList.remove("active");
@@ -64,6 +67,30 @@ const renderContent = (page) => {
   }
 };
 
+//   페이지 이동 함수 구현
+
+const goPrevPage = () => {
+  page -= maxButton;
+  render(page);
+};
+
+const goNextPage = () => {
+  page += maxButton;
+  render(page);
+};
+
+const prev = document.createElement("button");
+prev.classList.add("button", "prev");
+prev.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
+prev.addEventListener("click", goPrevPage);
+
+const next = document.createElement("button");
+next.classList.add("button", "next");
+next.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
+next.addEventListener("click", goNextPage);
+
+//  버튼 랜더링 함수
+
 const renderButton = (page) => {
   // 버튼 리스트 초기화
   while (buttons.hasChildNodes()) {
@@ -89,25 +116,3 @@ const render = (page) => {
   renderButton(page);
 };
 render(page);
-
-//   페이지 이동 함수 구현
-
-const goPrevPage = () => {
-  page -= maxButton;
-  render(page);
-};
-
-const goNextPage = () => {
-  page += maxButton;
-  render(page);
-};
-
-const prev = document.createElement("button");
-prev.classList.add("button", "prev");
-prev.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
-prev.addEventListener("click", goPrevPage);
-
-const next = document.createElement("button");
-next.classList.add("button", "next");
-next.innerHTML = '<i class="fa-solid fa-arrow-right"></i>';
-next.addEventListener("click", goNextPage);
